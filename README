@@ -1,0 +1,94 @@
+
+OVERVIEW
+
+'jarbinger' creates a standalone binary when given a Java build
+directory.  The build directory can contain classes or jars.  Of
+course normally a simple script is all that is needed to normally
+bootstrap and execute a java program once 'installed' in some
+location.  This tool avoids all that setup and allows distribution of
+a single executable file.  Of course, the cost is now you've got a
+machine and OS specific tool.
+
+USAGE
+
+jarbinger {toolName} {archiveDirPath} {jarFilename} {mainClassName}
+
+    toolName        standalone binary name (relative or absolute path)
+
+    archiveDirPath  directory with Java jar or class files (relative or
+                    absolute path)
+
+    jarFilename     name of jar(s) in build 
+
+    mainClassName   class containing the 'main' method
+
+EXAMPLES
+
+Here are the two main use cases of jarbinger:
+
+  + Given a standard NetBeans build you with a 'dist' directory which
+    contains a single jar 'SomeProject.jar', a main class
+    'some.project.Main', and you want the executable to be
+    'some_project'
+
+        jarbinger some_project dist SomeProject.jar some.project.Main
+
+    If there are any dependent jars under the 'lib' directory they
+    should be located implicitly because of how NetBeans packaged the
+    main jar with a manifest entry pointing to the dependent jars.
+
+  + Given a class file directory 'build/classes', a main class
+    'some.project.Main', and you want the executable to be 
+    'some_project'
+
+        jarbinger some_project build/classes . some.project.Main
+
+BACKGROUND
+
+The tool creates an archive of your Java classes and/or jars.  The
+archive gets converted into an object file.  The object file gets
+linked to a simple executable.  At runtime, we unpack the archive,
+start a JVM, invoke the main class you specified.
+
+Incidentally, the tool uses the same technique of unpacking files it
+needs to create your binary as your binary does at runtime to run your
+Java program.
+
+ENVIRONMENT CONFIGURATION
+
+jarbinger uses a temporary directory to store all unpacked files.  The
+goal of the directory name is to be unique to the user, easy to delete
+from the top level and also unique per version of the tool.  Here is
+the default format...
+
+    "/tmp/jarbinger-%1%/%2%/%3%" where
+        %1% = from environment variable LOGNAME (usually $USER)
+        %2% = toolName
+        %3% = a unique ID from build (uses `uuid`)
+ 
+  - Using JARBINGER_CACHE_PATH_FORMAT will override the default for
+    'jarbinger' or for the tool use.  The setting is not compiled into
+    the executable (currently).
+
+CAVEATS
+
+  - There is not much error checking.
+
+  - The default use of /tmp as a cache for unpacked Java files might
+    not be practical for all users.  See ENVIRONMENT CONFIGURATION for
+    alternatives.
+
+  - Errors which come from internal steps are usually confusing because
+    internally 'make' is invoked to create the binary.
+
+BUGS
+
+  - to be discovered
+
+TODO
+
+  - Add better error checking.
+  - Add 'jarbinger' command line option for JVM opts.
+  - If {toolName}_JVM_OPTS is set use instead while creating JVM.
+  - If {toolName}_JVM_OPTS_EXTRA is set add to JVM_OPTS while creating JVM.
+
