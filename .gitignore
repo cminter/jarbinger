@@ -1,0 +1,6 @@
+
+# generated
+*.h.gch
+*.o
+data.h
+
