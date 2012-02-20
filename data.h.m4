@@ -12,7 +12,7 @@ extern char _binary_`'_DATA_FILE_`'_end;
 extern int _binary_`'_DATA_FILE_`'_size;
 
 `#'d`'efine TOOL "_TOOL_"
-`#'d`'efine CACHE_ROOT_FORMAT "_CACHE_ROOT_FORMAT_"
+`#'d`'efine JARBINGER_CACHE_PATH_FORMAT "_JARBINGER_CACHE_PATH_FORMAT_"
 `#'d`'efine BUILD_TAG "_BUILD_TAG_"
 `#'d`'efine UNARCHIVE_CMD_FORMAT "_UNARCHIVE_CMD_FORMAT_"
 `#'d`'efine JAR_FILENAME "_JAR_FILENAME_"
