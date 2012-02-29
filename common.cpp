@@ -26,6 +26,11 @@ using std::ofstream;
 #define MODE_DEFAULT (S_IRUSR | S_IWUSR  | S_IXUSR)
 
 //////////////////////////////////////////////////////////////////////
+
+/**
+ * manages a working directory (temporary by default) that
+ * is deleted when WorkDir goes out of scope
+ */
 class WorkDir {
 public:
     WorkDir(string path, mode_t mode= MODE_DEFAULT) : _path(path), _mode(mode) {
