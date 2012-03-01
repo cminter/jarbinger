@@ -6,7 +6,6 @@ ifndef JAVA_HOME
   $(error must define JAVA_HOME)
 endif
 JAVA_INC_DIRS = $(JAVA_HOME)/include $(JAVA_HOME)/include/linux
-#JAVA_LIB_DIRS = $(JAVA_HOME)/jre/lib/amd64 $(JAVA_HOME)/jre/lib/amd64/server
 JAVA_LIB_DIRS = $(JAVA_HOME)/jre/lib/amd64/server
 JAVA_LIBS = jvm
 
