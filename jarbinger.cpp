@@ -23,7 +23,7 @@ public:
     Usage(string binName) : _binName(binName) { /* nothing */ }
 
     virtual void output() {
-        cout << "usage: " << _binName << " {toolName} {archiveDirPath} {jarFilename} {mainClassName}" << endl;
+        cout << "usage: " << _binName << " {toolName} {archiveDirPath} {jarFilename|.} {mainClassName}" << endl;
     }
 
 private:
