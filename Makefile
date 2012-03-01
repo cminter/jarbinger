@@ -2,7 +2,9 @@
 # Makefile
 ######################################################################
 
-JAVA_HOME = /opt/java/jdk1.7.0_01
+ifndef JAVA_HOME
+  $(error must define JAVA_HOME)
+endif
 JAVA_INC_DIRS = $(JAVA_HOME)/include $(JAVA_HOME)/include/linux
 #JAVA_LIB_DIRS = $(JAVA_HOME)/jre/lib/amd64 $(JAVA_HOME)/jre/lib/amd64/server
 JAVA_LIB_DIRS = $(JAVA_HOME)/jre/lib/amd64/server
@@ -26,7 +28,7 @@ ifndef JARBINGER_CACHE_PATH_FORMAT
 endif
 
 ifndef BUILD_TAG
-  BUILD_TAG = $(shell uuid)
+  BUILD_TAG = $(shell uuidgen)
 endif
 
 ifndef JAR_FILENAME 
@@ -60,9 +62,12 @@ ifneq ($(TOOL),$(JB_TOOL))
   LIBS += $(JAVA_LIBS)
 endif
 LD_FLAGS2 = $(addprefix -l,$(LIBS))
-ifneq ($(TOOL),$(JB_TOOL))
-  LD_FLAGS2 += -Wl,-rpath,$(JAVA_LIB_DIRS)
+ifeq ($(TOOL),$(JB_TOOL))
+  RPATH = 
+else
+  RPATH = $(JAVA_LIB_DIRS)
 endif
+LD_FLAGS2 += -Wl,-rpath,$(RPATH)
 
 
 CLEANFILES += $(EXE) $(OBJS) $(D_OBJ) $(D_HDR) *.h.gch $(D_IN) $(ARCHIVE)

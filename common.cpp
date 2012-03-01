@@ -76,11 +76,12 @@ private:
         if (! boost::filesystem::exists(parent.c_str())) {
             mkdirPath(parent);
         }
-        if (mkdir(path.c_str(), _mode)) {
-            string p(path.c_str());
-            throw Exception("unable to mkdir '"+ p +"'");
+        if (! boost::filesystem::exists(path.c_str())) {
+            if (mkdir(path.c_str(), _mode)) {
+                string p(path.c_str());
+                throw Exception("unable to mkdir '"+ p +"'");
+            }
         }
-        
     }
 
     string _path;
