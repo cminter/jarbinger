@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
                 +" ARCHIVE_DIR="+ archiveDirPath
                 +" JAR_FILENAME="+ jarFilename
                 +" MAIN_CLASS_NAME="+ mainClassName
-                +" JVM_OPTS_DEFAULT="+ jvmOptsDefault);
+                +" JVM_OPTS_DEFAULT=\""+ jvmOptsDefault +"\"");
         int systemStatus= system(makeCmd.c_str());
         if (systemStatus) {
             throw JB::Exception("executing '"+ makeCmd +"'");
