@@ -15,6 +15,7 @@ machine and OS specific tool.
 USAGE
 
 jarbinger {toolName} {archiveDirPath} {jarFilename|.} {mainClassName}
+        [jvmOptsDefault]
 
     toolName        standalone binary name (relative or absolute path)
 
@@ -24,6 +25,8 @@ jarbinger {toolName} {archiveDirPath} {jarFilename|.} {mainClassName}
     jarFilename     name of jar(s) colon separated (or '.' if no jars)
 
     mainClassName   class containing the 'main' method
+
+    jvmOptsDefault  JVM default options passed while creating the JVM
 
 EXAMPLES
 
@@ -45,6 +48,10 @@ Here are the two main use cases of jarbinger:
     'some_project'
 
         jarbinger some_project build/classes . some.project.Main
+
+Also you can append any JVM default options such as defining system
+properties or configuring JVM memory.  The user is allowed to override
+the defaults via environment variable named '{toolName}_JVM_OPTS'
 
 BACKGROUND
 
@@ -73,6 +80,9 @@ the default format...
     'jarbinger' or for the tool use.  The setting is not compiled into
     the executable (currently).
 
+  - Using {toolName}_JVM_OPTS on the tool at runtime will override the
+    compiled in JVM default options (see 'jvmOptsDefault' above)
+
 CAVEATS
 
   ! currently hard coded arguments to 'objcopy' for x86-64
@@ -92,9 +102,8 @@ BUGS
 
 TODO
 
-  - determine objcopy arguments from user's system
+  - Determine objcopy arguments from user's system.
   - Add better error checking.
   - Add 'jarbinger' command line option for JVM opts.
-  - If {toolName}_JVM_OPTS is set use instead while creating JVM.
   - If {toolName}_JVM_OPTS_EXTRA is set add to JVM_OPTS while creating JVM.
 
