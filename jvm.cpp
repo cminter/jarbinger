@@ -74,7 +74,9 @@ static JNIEnv* createJVM(const string& classpath) {
     char* userJVMOptions= getenv(jvmOptionsEnvName.c_str());
     string jvmOptionsExtraS(userJVMOptions ? userJVMOptions
             : JVM_OPTS_DEFAULT);
-    boost::split(jvmOptions, jvmOptionsExtraS, boost::is_any_of(" "));
+    if (jvmOptionsExtraS != "") {
+        boost::split(jvmOptions, jvmOptionsExtraS, boost::is_any_of(" "));
+    }
     // add classpath
     string classpathOpt("-Djava.class.path="+ classpath);
     jvmOptions.push_back(classpathOpt);
