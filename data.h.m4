@@ -17,7 +17,7 @@ extern int _binary_`'_DATA_FILE_`'_size;
 `#'d`'efine UNARCHIVE_CMD_FORMAT "_UNARCHIVE_CMD_FORMAT_"
 `#'d`'efine JAR_FILENAME "_JAR_FILENAME_"
 `#'d`'efine MAIN_CLASS_NAME "_MAIN_CLASS_NAME_"
-`#'d`'efine JVM_OPTS "_JVM_OPTS_"
+`#'d`'efine JVM_OPTS_DEFAULT "_JVM_OPTS_DEFAULT_"
 
 //////////////////////////////////////////////////////////////////////
 #ifdef __cplusplus
