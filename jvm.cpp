@@ -5,10 +5,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <boost/algorithm/string.hpp>
 #include <jni.h>
 
 #include "jvm.h"
 #include "common.h"
+#include "data.h"
 
 //////////////////////////////////////////////////////////////////////
 
@@ -71,15 +73,32 @@ static JNIEnv* createJVM(const string& classpath, const string& jvmOpts) {
     JavaVM* jvm;
     JNIEnv* env;
     JavaVMInitArgs args;
-    JavaVMOption options[1];
 
-    // prepare JVM options
     args.version= JNI_VERSION_1_6;
-    args.nOptions= 1;
+
+    vector<string> jvmOptions;
+    // add default or user environment options
+    string tool(TOOL);
+    string jvmOptionsEnvName(tool +"_JVM_OPTS");
+    char* userJVMOptions= getenv(jvmOptionsEnvName.c_str());
+    string jvmOptionsExtraS(userJVMOptions ? userJVMOptions
+            : JVM_OPTS_DEFAULT);
+    if (jvmOptionsExtraS != "") {
+        boost::split(jvmOptions, jvmOptionsExtraS, boost::is_any_of(" "));
+    }
+    // add classpath
     string classpathOpt("-Djava.class.path="+ classpath);
-    options[0].optionString= strdup(classpathOpt.c_str());
-    //TODO: fill jvmOpts into options
+    jvmOptions.push_back(classpathOpt);
+    // convert vector to 'options' array
+    JavaVMOption* options= new JavaVMOption[jvmOptions.size()];
+    vector<string>::iterator joIt;
+    int optNo= 0;
+    for (joIt= jvmOptions.begin(); joIt != jvmOptions.end(); joIt++) {
+        options[optNo].optionString= strdup((*joIt).c_str());
+        optNo++;
+    }
     args.options= options;
+    args.nOptions= optNo;
     args.ignoreUnrecognized= JNI_FALSE;
 
     // create JVM

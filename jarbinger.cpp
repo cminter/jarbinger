@@ -55,12 +55,22 @@ int main(int argc, char** argv) {
         string jarFilename(argv[argNo++]);
         if (argNo >= argc) throw JB::Exception("missing main class name", &usage);
         string mainClassName(argv[argNo++]);
+        string jvmOptsDefault("");
+        // rest of arguments become default JVM options
+        while (argNo < argc) {
+            if (jvmOptsDefault != "") jvmOptsDefault+= " ";
+            jvmOptsDefault+= argv[argNo];
+            argNo++;
+        }
         string jarbingerDataPath= JB::unArchive("jarbinger", &_binary_data_file_start,
                 (JB::U64) &_binary_data_file_size);
         JB::setCwd(jarbingerDataPath);
         string makeCmd("make -s -C "+ jarbingerDataPath +" TOOL="+ toolName
-                +" OUTPUT_DIR="+ outputDirPath +" ARCHIVE_DIR="+ archiveDirPath
-                +" JAR_FILENAME="+ jarFilename +" MAIN_CLASS_NAME="+ mainClassName);
+                +" OUTPUT_DIR="+ outputDirPath
+                +" ARCHIVE_DIR="+ archiveDirPath
+                +" JAR_FILENAME="+ jarFilename
+                +" MAIN_CLASS_NAME="+ mainClassName
+                +" JVM_OPTS_DEFAULT=\""+ jvmOptsDefault +"\"");
         int systemStatus= system(makeCmd.c_str());
         if (systemStatus) {
             throw JB::Exception("executing '"+ makeCmd +"'");
