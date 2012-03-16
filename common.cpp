@@ -118,8 +118,10 @@ string unArchive(const string& toolName, char* dataAddr, const U64 dataSize) {
     stringstream cacheRootS;
     cacheRootS << boost::format(JARBINGER_CACHE_PATH_FORMAT) % logname % toolName % BUILD_TAG;
     string cacheDirPath(cacheRootS.str());
+    string sentinelFilename(cacheDirPath +"/.sentinel");
     string archiveFilename(cacheDirPath +"/"+ archiveTail);
-    if (! boost::filesystem::exists(cacheDirPath.c_str())) {
+    if (! boost::filesystem::exists(cacheDirPath)
+            || ! boost::filesystem::exists(sentinelFilename)) {
         // only done if does not already exist
         WorkDir cacheDir(cacheDirPath);
         WorkFile archiveFile(archiveFilename);
@@ -131,6 +133,10 @@ string unArchive(const string& toolName, char* dataAddr, const U64 dataSize) {
         if (systemStatus) {
             throw Exception("executing '"+ unarchiveCmdS.str() +"'");
         }
+        // create sentinel file.  if sentinel missing, repeating
+        // this un-archive flow is required
+        char sentinelData[]= "I feel FANTASTIC and I'm still alive.\n";
+        writeToFile(sentinelFilename, sentinelData, sizeof(sentinelData));
         cacheDir.keep();
     }
     return cacheDirPath;
