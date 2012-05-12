@@ -99,7 +99,9 @@ CAVEATS
 
 BUGS
 
-  - to be discovered
+  - needs to catch and dump any exception from application and
+    propagate exit status
+    (currently exceptions are silent; there is no indication)
 
 TODO
 
